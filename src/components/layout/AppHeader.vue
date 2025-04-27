@@ -94,10 +94,11 @@ import NotificationMenu from './header/NotificationMenu.vue'
 import UserMenu from './header/UserMenu.vue'
 
 const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar()
+// console.log({ toggleSidebar, toggleMobileSidebar, isMobileOpen })
 
 const handleToggle = () => {
   if (window.innerWidth >= 1024) {
-    toggleSidebar()
+    toggleSidebar?.() // Ensure toggleSidebar is defined before calling
   } else {
     toggleMobileSidebar()
   }

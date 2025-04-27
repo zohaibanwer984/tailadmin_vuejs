@@ -6,6 +6,7 @@ const SidebarKey = Symbol('sidebar')
 export function useSidebarProvider() {
   // Create reactive state for the sidebar
   const isOpen = ref(false)
+  const isMobileOpen = ref(false)
 
   // Functions to manipulate the sidebar state
   const open = () => {
@@ -20,12 +21,23 @@ export function useSidebarProvider() {
     isOpen.value = !isOpen.value
   }
 
+  const toggleSidebar = () => {
+    console.log('Sidebar toggled')
+  }
+
+  const toggleMobileSidebar = () => {
+    isMobileOpen.value = !isMobileOpen.value
+  }
+
   // Provide the sidebar state and functions to child components
   provide(SidebarKey, {
     isOpen,
     open,
     close,
     toggle,
+    toggleSidebar,
+    toggleMobileSidebar,
+    isMobileOpen,
   })
 
   return {
@@ -33,6 +45,9 @@ export function useSidebarProvider() {
     open,
     close,
     toggle,
+    toggleSidebar,
+    toggleMobileSidebar,
+    isMobileOpen,
   }
 }
 

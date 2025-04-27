@@ -1,65 +1,95 @@
-import { ref, provide, inject } from 'vue'
 
-// Symbol for providing/injecting the sidebar state
-const SidebarKey = Symbol('sidebar')
+import { ref, computed, onMounted, onUnmounted, provide, inject } from 'vue'
+import type { Ref } from 'vue' //
+
+interface SidebarContextType {
+  isExpanded: Ref<boolean>
+  isMobileOpen: Ref<boolean>
+  isHovered: Ref<boolean>
+  activeItem: Ref<string | null>
+  openSubmenu: Ref<string | null>
+  toggleSidebar: () => void
+  toggleMobileSidebar: () => void
+  setIsHovered: (isHovered: boolean) => void
+  setActiveItem: (item: string | null) => void
+  toggleSubmenu: (item: string) => void
+}
+
+const SidebarSymbol = Symbol()
 
 export function useSidebarProvider() {
-  // Create reactive state for the sidebar
-  const isOpen = ref(false)
+  const isExpanded = ref(true)
   const isMobileOpen = ref(false)
+  const isMobile = ref(false)
+  const isHovered = ref(false)
+  const activeItem = ref<string | null>(null)
+  const openSubmenu = ref<string | null>(null)
 
-  // Functions to manipulate the sidebar state
-  const open = () => {
-    isOpen.value = true
+  const handleResize = () => {
+    const mobile = window.innerWidth < 768
+    isMobile.value = mobile
+    if (!mobile) {
+      isMobileOpen.value = false
+    }
   }
 
-  const close = () => {
-    isOpen.value = false
-  }
+  onMounted(() => {
+    handleResize()
+    window.addEventListener('resize', handleResize)
+  })
 
-  const toggle = () => {
-    isOpen.value = !isOpen.value
-  }
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+  })
 
   const toggleSidebar = () => {
-    console.log('Sidebar toggled')
+    if (isMobile.value) {
+      isMobileOpen.value = !isMobileOpen.value
+    } else {
+      isExpanded.value = !isExpanded.value
+    }
   }
 
   const toggleMobileSidebar = () => {
     isMobileOpen.value = !isMobileOpen.value
   }
 
-  // Provide the sidebar state and functions to child components
-  provide(SidebarKey, {
-    isOpen,
-    open,
-    close,
-    toggle,
-    toggleSidebar,
-    toggleMobileSidebar,
-    isMobileOpen,
-  })
-
-  return {
-    isOpen,
-    open,
-    close,
-    toggle,
-    toggleSidebar,
-    toggleMobileSidebar,
-    isMobileOpen,
+  const setIsHovered = (value: boolean) => {
+    isHovered.value = value
   }
+
+  const setActiveItem = (item: string | null) => {
+    activeItem.value = item
+  }
+
+  const toggleSubmenu = (item: string) => {
+    openSubmenu.value = openSubmenu.value === item ? null : item
+  }
+
+  const context: SidebarContextType = {
+    isExpanded: computed(() => (isMobile.value ? false : isExpanded.value)),
+    isMobileOpen,
+    isHovered,
+    activeItem,
+    openSubmenu,
+    toggleSidebar,
+    toggleMobileSidebar,
+    setIsHovered,
+    setActiveItem,
+    toggleSubmenu,
+  }
+
+  provide(SidebarSymbol, context)
+
+  return context
 }
 
-// Composable for consuming the sidebar state in child components
-export function useSidebar() {
-  const sidebar = inject(SidebarKey)
-
-  if (!sidebar) {
+export function useSidebar(): SidebarContextType {
+  const context = inject<SidebarContextType>(SidebarSymbol)
+  if (!context) {
     throw new Error(
-      'useSidebar() must be used within a component that has a parent SidebarProvider',
+      'useSidebar must be used within a component that has SidebarProvider as an ancestor',
     )
   }
-
-  return sidebar
+  return context
 }

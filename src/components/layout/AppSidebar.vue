@@ -243,39 +243,39 @@ const menuGroups = [
       },
     ],
   },
-  {
-    title: 'Others',
-    items: [
-      {
-        icon: PieChartIcon,
-        name: 'Charts',
-        subItems: [
-          { name: 'Line Chart', path: '/line-chart', pro: false },
-          { name: 'Bar Chart', path: '/bar-chart', pro: false },
-        ],
-      },
-      {
-        icon: BoxCubeIcon,
-        name: 'Ui Elements',
-        subItems: [
-          { name: 'Alerts', path: '/alerts', pro: false },
-          { name: 'Avatars', path: '/avatars', pro: false },
-          { name: 'Badge', path: '/badge', pro: false },
-          { name: 'Buttons', path: '/buttons', pro: false },
-          { name: 'Images', path: '/images', pro: false },
-          { name: 'Videos', path: '/videos', pro: false },
-        ],
-      },
-      {
-        icon: PlugInIcon,
-        name: 'Authentication',
-        subItems: [
-          { name: 'Signin', path: '/signin', pro: false },
-          { name: 'Signup', path: '/signup', pro: false },
-        ],
-      },
-    ],
-  },
+  // {
+  //   title: 'Others',
+  //   items: [
+  //     {
+  //       icon: PieChartIcon,
+  //       name: 'Charts',
+  //       subItems: [
+  //         { name: 'Line Chart', path: '/line-chart', pro: false },
+  //         { name: 'Bar Chart', path: '/bar-chart', pro: false },
+  //       ],
+  //     },
+  //     {
+  //       icon: BoxCubeIcon,
+  //       name: 'Ui Elements',
+  //       subItems: [
+  //         { name: 'Alerts', path: '/alerts', pro: false },
+  //         { name: 'Avatars', path: '/avatars', pro: false },
+  //         { name: 'Badge', path: '/badge', pro: false },
+  //         { name: 'Buttons', path: '/buttons', pro: false },
+  //         { name: 'Images', path: '/images', pro: false },
+  //         { name: 'Videos', path: '/videos', pro: false },
+  //       ],
+  //     },
+  //     {
+  //       icon: PlugInIcon,
+  //       name: 'Authentication',
+  //       subItems: [
+  //         { name: 'Signin', path: '/signin', pro: false },
+  //         { name: 'Signup', path: '/signup', pro: false },
+  //       ],
+  //     },
+  //   ],
+  // },
 ]
 
 const isActive = (path) => route.path === path

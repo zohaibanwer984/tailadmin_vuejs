@@ -82,14 +82,14 @@ const closeDropdown = () => {
 
 const signOut = async () => {
   const authStore = useAuthStore()
-  const success = await authStore.logout()
-  closeDropdown()
-  if (success) {
+  // const success = await authStore.logout()
+  // closeDropdown()
+  // if (success) {
     router.push('/login')
-  } else {
+  // } else {
     // TODO: DISPLAY TOASTERS .. 
-    console.error(authStore.error)
-  }
+    // console.error(authStore.error)
+  // }
 }
 
 const handleClickOutside = (event) => {

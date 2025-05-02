@@ -14,8 +14,8 @@ const routes = [
     path: '/',
     redirect: (to) => {
       const authStore = useAuthStore()
-      return authStore.isAuthenticated ? { name: 'Dashboard' } : { name: 'Login' }
-      // return true ? { name: 'Dashboard' } : { name: 'Login' }
+      // return authStore.isAuthenticated ? { name: 'Dashboard' } : { name: 'Login' }
+      return true ? { name: 'Dashboard' } : { name: 'Login' }
     },
   },
   {

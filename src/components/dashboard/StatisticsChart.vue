@@ -36,8 +36,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import { ref } from 'vue'
+import VueApexCharts from 'vue3-apexcharts'
 
 const options = [
   { value: 'optionOne', label: 'Monthly' },
@@ -46,7 +47,6 @@ const options = [
 ]
 
 const selected = ref('optionOne')
-import VueApexCharts from 'vue3-apexcharts'
 
 const series = ref([
   {

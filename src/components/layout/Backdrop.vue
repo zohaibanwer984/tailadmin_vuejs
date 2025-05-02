@@ -6,7 +6,18 @@
   ></div>
 </template>
 
-<script setup lang="ts">
-import { useSidebar } from '@/composables/useSidebar'
-const { toggleMobileSidebar, isMobileOpen } = useSidebar()
+<script>
+import { useSidebar } from '@/composables/useSidebar.js'
+
+export default {
+  setup() {
+    // Call useSidebar inside the setup function
+    const { toggleMobileSidebar, isMobileOpen } = useSidebar()
+
+    return {
+      toggleMobileSidebar,
+      isMobileOpen,
+    }
+  },
+}
 </script>

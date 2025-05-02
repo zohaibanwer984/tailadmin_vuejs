@@ -84,37 +84,57 @@
   </header>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useSidebar } from '@/composables/useSidebar'
-import ThemeToggler from '../common/ThemeToggler.vue'
-import SearchBar from './header/SearchBar.vue'
-import HeaderLogo from './header/HeaderLogo.vue'
-import NotificationMenu from './header/NotificationMenu.vue'
-import UserMenu from './header/UserMenu.vue'
+<script>
+import { ref } from 'vue';
+import { useSidebar } from '@/composables/useSidebar';
+import ThemeToggler from '../common/ThemeToggler.vue';
+import SearchBar from './header/SearchBar.vue';
+import HeaderLogo from './header/HeaderLogo.vue';
+import NotificationMenu from './header/NotificationMenu.vue';
+import UserMenu from './header/UserMenu.vue';
 
-const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar()
-// console.log({ toggleSidebar, toggleMobileSidebar, isMobileOpen })
+export default {
+  components: {
+    ThemeToggler,
+    SearchBar,
+    HeaderLogo,
+    NotificationMenu,
+    UserMenu,
+  },
+  setup() {
+    const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar();
 
-const handleToggle = () => {
-  if (window.innerWidth >= 1024) {
-    toggleSidebar?.() // Ensure toggleSidebar is defined before calling
-  } else {
-    toggleMobileSidebar()
-  }
-}
+    const handleToggle = () => {
+      if (window.innerWidth >= 1024) {
+        toggleSidebar();
+      } else {
+        toggleMobileSidebar();
+      }
+    };
 
-const dropdownOpen = ref(false)
-const notifying = ref(false)
+    const dropdownOpen = ref(false);
+    const notifying = ref(false);
 
-const toggleDropdown = () => {
-  dropdownOpen.value = !dropdownOpen.value
-  notifying.value = false
-}
+    const toggleDropdown = () => {
+      dropdownOpen.value = !dropdownOpen.value;
+      notifying.value = false;
+    };
 
-const isApplicationMenuOpen = ref(false)
+    const isApplicationMenuOpen = ref(false);
 
-const toggleApplicationMenu = () => {
-  isApplicationMenuOpen.value = !isApplicationMenuOpen.value
-}
+    const toggleApplicationMenu = () => {
+      isApplicationMenuOpen.value = !isApplicationMenuOpen.value;
+    };
+
+    return {
+      handleToggle,
+      dropdownOpen,
+      notifying,
+      toggleDropdown,
+      isApplicationMenuOpen,
+      toggleApplicationMenu,
+      isMobileOpen,
+    };
+  },
+};
 </script>

@@ -132,8 +132,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup>
+import { computed } from 'vue'
 import DropdownMenu from '../common/DropdownMenu.vue'
 const menuItems = [
   { label: 'View More', onClick: () => console.log('View More clicked') },
@@ -179,7 +179,7 @@ const chartOptions = {
           fontWeight: '600',
           offsetY: 60,
           color: '#1D2939',
-          formatter: function (val: number) {
+          formatter: function (val) {
             return val.toFixed(2) + '%'
           },
         },

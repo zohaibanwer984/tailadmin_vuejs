@@ -1,151 +1,91 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+
+// Route components
+import Login from '../views/auth/Login.vue'
+import Dashboard from '../views/Dashboard.vue'
+import NotFound from '../views/NotFound.vue'
+import ForgetPassword from '@/views/auth/ForgetPassword.vue'
+import EmailSent from '@/views/auth/EmailSent.vue'
+import ResetPassword from '@/views/auth/ResetPassword.vue'
+
+const routes = [
+  {
+    path: '/',
+    redirect: (to) => {
+      const authStore = useAuthStore()
+      return authStore.isAuthenticated ? { name: 'Dashboard' } : { name: 'Login' }
+      // return true ? { name: 'Dashboard' } : { name: 'Login' }
+    },
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: '/forget-password',
+    name: 'ForgetPassword',
+    component: ForgetPassword,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: '/email-sent',
+    name: 'EmailSent',
+    component: EmailSent,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: ResetPassword,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { left: 0, top: 0 }
+  history: createWebHashHistory(import.meta.env.BASE_URL),
+  hashRoute: '/#/',
+  routes,
+  scrollBehavior() {
+    // Always scroll to top
+    return { top: 0 }
   },
-  routes: [
-    {
-      path: '/',
-      name: 'Ecommerce',
-      component: () => import('../views/Ecommerce.vue'),
-      meta: {
-        title: 'Dashboard',
-      },
-    },
-    {
-      path: '/calendar',
-      name: 'Calendar',
-      component: () => import('../views/Others/Calendar.vue'),
-      meta: {
-        title: 'Calendar',
-      },
-    },
-    {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('../views/Others/UserProfile.vue'),
-      meta: {
-        title: 'Profile',
-      },
-    },
-    {
-      path: '/form-elements',
-      name: 'Form Elements',
-      component: () => import('../views/Forms/FormElements.vue'),
-      meta: {
-        title: 'Form Elements',
-      },
-    },
-    {
-      path: '/basic-tables',
-      name: 'Basic Tables',
-      component: () => import('../views/Tables/BasicTables.vue'),
-      meta: {
-        title: 'Basic Tables',
-      },
-    },
-    {
-      path: '/line-chart',
-      name: 'Line Chart',
-      component: () => import('../views/Chart/LineChart/LineChart.vue'),
-    },
-    {
-      path: '/bar-chart',
-      name: 'Bar Chart',
-      component: () => import('../views/Chart/BarChart/BarChart.vue'),
-    },
-    {
-      path: '/alerts',
-      name: 'Alerts',
-      component: () => import('../views/UiElements/Alerts.vue'),
-      meta: {
-        title: 'Alerts',
-      },
-    },
-    {
-      path: '/avatars',
-      name: 'Avatars',
-      component: () => import('../views/UiElements/Avatars.vue'),
-      meta: {
-        title: 'Avatars',
-      },
-    },
-    {
-      path: '/badge',
-      name: 'Badge',
-      component: () => import('../views/UiElements/Badges.vue'),
-      meta: {
-        title: 'Badge',
-      },
-    },
+})
 
-    {
-      path: '/buttons',
-      name: 'Buttons',
-      component: () => import('../views/UiElements/Buttons.vue'),
-      meta: {
-        title: 'Buttons',
-      },
-    },
+// Navigation guards
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
 
-    {
-      path: '/images',
-      name: 'Images',
-      component: () => import('../views/UiElements/Images.vue'),
-      meta: {
-        title: 'Images',
-      },
-    },
-    {
-      path: '/videos',
-      name: 'Videos',
-      component: () => import('../views/UiElements/Videos.vue'),
-      meta: {
-        title: 'Videos',
-      },
-    },
-    {
-      path: '/blank',
-      name: 'Blank',
-      component: () => import('../views/Pages/BlankPage.vue'),
-      meta: {
-        title: 'Blank',
-      },
-    },
+  // Check if route requires authentication
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return next({ name: 'Login', query: { redirect: to.fullPath } })
+  }
 
-    {
-      path: '/error-404',
-      name: '404 Error',
-      component: () => import('../views/Errors/FourZeroFour.vue'),
-      meta: {
-        title: '404 Error',
-      },
-    },
+  // Check if route requires guest (non-authenticated user)
+  if (to.meta.requiresGuest && isAuthenticated) {
+    return next({ name: 'Dashboard' })
+  }
 
-    {
-      path: '/signin',
-      name: 'Signin',
-      component: () => import('../views/Auth/Signin.vue'),
-      meta: {
-        title: 'Signin',
-      },
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: () => import('../views/Auth/Signup.vue'),
-      meta: {
-        title: 'Signup',
-      },
-    },
-  ],
+  // Ensure /email-sent is only accessible via /forget-password
+  if (to.name === 'EmailSent' && to.query.from !== 'forget-password') {
+    return next({ name: 'Login' })
+  }
+  
+  next()
 })
 
 export default router
-
-router.beforeEach((to, from, next) => {
-  document.title = `CAM ${to.meta.title} | CAM Front-end - Vue.js Tailwind CSS`
-  next()
-})

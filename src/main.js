@@ -6,6 +6,8 @@ import App from './App.vue'
 import router from './router'
 import { createPinia } from 'pinia'
 import './assets/main.css'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css' // Import the library's styles
 
 // Register all valid rules from @vee-validate/rules
 Object.keys(rules).forEach((rule) => {
@@ -66,6 +68,9 @@ configure({
 
 // Create Vue app
 const app = createApp(App)
+
+// Register the loading component globally
+app.component('Loading', Loading)
 
 // Use Pinia for state management
 app.use(createPinia())

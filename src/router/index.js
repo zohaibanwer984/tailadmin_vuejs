@@ -23,42 +23,64 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: { requiresGuest: true },
+    meta: {
+      requiresGuest: true,
+      title: 'Login',
+    },
   },
   {
     path: '/forget-password',
     name: 'ForgetPassword',
     component: ForgetPassword,
-    meta: { requiresGuest: true },
+    meta: {
+      requiresGuest: true,
+      title: 'Forget Password',
+    },
   },
   {
     path: '/email-sent',
     name: 'EmailSent',
     component: EmailSent,
-    meta: { requiresGuest: true },
+    meta: {
+      requiresGuest: true,
+      title: 'Email Sent',
+    },
   },
   {
     path: '/reset-password',
     name: 'ResetPassword',
     component: ResetPassword,
-    meta: { requiresGuest: true },
+    meta: {
+      requiresGuest: true,
+      title: 'Reset Password',
+    },
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true,
+      title: 'Dashboard',
+    },
   },
   {
     path: '/blank',
     name: 'Blank',
     component: BlankPage,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true,
+      title: 'Blank',
+    },
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound,
+    meta: {
+      requiresAuth: true,
+      title: 'Page Not Found',
+    },
   },
 ]
 
@@ -74,6 +96,7 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
   // const authStore = useAuthStore()
   // const isAuthenticated = authStore.isAuthenticated
 
@@ -91,7 +114,7 @@ router.beforeEach((to, from, next) => {
   // if (to.name === 'EmailSent' && to.query.from !== 'forget-password') {
   //   return next({ name: 'Login' })
   // }
-  
+
   next()
 })
 

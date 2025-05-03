@@ -67,23 +67,23 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const isAuthenticated = authStore.isAuthenticated
+  // const authStore = useAuthStore()
+  // const isAuthenticated = authStore.isAuthenticated
 
-  // Check if route requires authentication
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    return next({ name: 'Login', query: { redirect: to.fullPath } })
-  }
+  // // Check if route requires authentication
+  // if (to.meta.requiresAuth && !isAuthenticated) {
+  //   return next({ name: 'Login', query: { redirect: to.fullPath } })
+  // }
 
-  // Check if route requires guest (non-authenticated user)
-  if (to.meta.requiresGuest && isAuthenticated) {
-    return next({ name: 'Dashboard' })
-  }
+  // // Check if route requires guest (non-authenticated user)
+  // if (to.meta.requiresGuest && isAuthenticated) {
+  //   return next({ name: 'Dashboard' })
+  // }
 
-  // Ensure /email-sent is only accessible via /forget-password
-  if (to.name === 'EmailSent' && to.query.from !== 'forget-password') {
-    return next({ name: 'Login' })
-  }
+  // // Ensure /email-sent is only accessible via /forget-password
+  // if (to.name === 'EmailSent' && to.query.from !== 'forget-password') {
+  //   return next({ name: 'Login' })
+  // }
   
   next()
 })

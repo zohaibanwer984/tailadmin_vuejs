@@ -29,7 +29,7 @@
             type="email"
             id="email"
             placeholder="info@gmail.com"
-            rules="required|email"
+            rules=""
             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
           />
           <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
@@ -70,17 +70,17 @@ const formError = ref('')
 
 const handleSubmit = async (values) => {
   formError.value = '' // Clear previous error
-  // authStore
-  //   .requestPasswordReset(values)
-  //   .then(() => {
+  authStore
+    .requestPasswordReset(values)
+    .then(() => {
       router.push({ name: 'EmailSent', query: { from: 'forget-password' } })
-  //   })
-  //   .catch((error) => {
-  //     if (error?.email) {
-  //       formError.value = error.email[0] // Set the error message
-  //     } else {
-  //       formError.value = 'An unexpected error occurred. Please try again.'
-  //     }
-  //   })
+    })
+    .catch((error) => {
+      if (error?.email) {
+        formError.value = error.email[0] // Set the error message
+      } else {
+        formError.value = 'An unexpected error occurred. Please try again.'
+      }
+    })
 }
 </script>

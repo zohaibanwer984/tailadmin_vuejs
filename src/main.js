@@ -66,6 +66,7 @@ configure({
   },
 })
 
+document.body.classList.add('dark:bg-gray-900');
 // Create Vue app
 const app = createApp(App)
 

@@ -14,7 +14,7 @@
                   Sign In
                 </h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  Enter your CNIC and password to sign in!
+                  Enter your email and password to sign in!
                 </p>
               </div>
               <div>
@@ -23,23 +23,23 @@
                   <div v-if="formError" class="mb-4 text-sm text-red-500">
                     {{ formError }}
                   </div>
-                  <!-- CNIC -->
+                  <!-- Email -->
                   <div>
                     <label
-                      for="cnic"
+                      for="email"
                       class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
-                      CNIC<span class="text-error-500">*</span>
+                      Email<span class="text-error-500">*</span>
                     </label>
                     <Field
-                      name="cnic"
+                      name="email"
                       type="text"
-                      id="cnic"
-                      placeholder="12345-1234567-1"
-                      rules="cnic"
+                      id="email"
+                      placeholder="user@example.com"
+                      rules=""
                       class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
-                    <ErrorMessage name="cnic" class="text-red-500 text-sm mt-1" />
+                    <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
                   </div>
                   <!-- Password -->
                   <div>
@@ -55,7 +55,6 @@
                         :type="showPassword ? 'text' : 'password'"
                         id="password"
                         placeholder="Enter your password"
-                        rules="required|password"
                         class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                       />
                       <span
@@ -168,19 +167,20 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
-const handleSubmit = async (values) => {
+const handleSubmit = (values) => {
   formError.value = '' // Clear previous error
-  // authStore
-  //   .login(values)
-  //   .then(() => {
+  authStore
+    .login(values)
+    .then(() => {
       router.push('/dashboard')
-    // })
-    // .catch((error) => {
-    //   if (error?.non_field_errors) {
-    //     formError.value = error.non_field_errors[0] // Set the error message
-    //   } else {
-    //     formError.value = 'An unexpected error occurred. Please try again.'
-    //   }
-    // })
+    })
+    .catch((error) => {
+      router.push('/dashboard')
+      if (error?.non_field_errors) {
+        formError.value = error.non_field_errors[0] // Set the error message
+      } else {
+        formError.value = 'An unexpected error occurred. Please try again.'
+      }
+    })
 }
 </script>

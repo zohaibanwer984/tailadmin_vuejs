@@ -11,6 +11,7 @@ import ResetPassword from '@/views/auth/ResetPassword.vue'
 import BlankPage from '@/views/pages/BlankPage.vue'
 import UserProfile from '@/views/others/UserProfile.vue'
 import BasicTables from '@/views/tables/BasicTables.vue'
+import IconsPage from '@/views/IconsPage.vue'
 
 const routes = [
   {
@@ -91,6 +92,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Blank',
+    },
+  },
+  {
+    path: '/icons',
+    name: 'IconsPage',
+    component: IconsPage,
+    meta: {
+      requiresAuth: true,
+      title: 'Icons',
     },
   },
   {

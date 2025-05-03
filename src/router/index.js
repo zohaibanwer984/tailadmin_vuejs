@@ -8,6 +8,7 @@ import NotFound from '../views/NotFound.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 import EmailSent from '@/views/auth/EmailSent.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
+import BlankPage from '@/views/pages/BlankPage.vue'
 
 const routes = [
   {
@@ -46,6 +47,12 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/blank',
+    name: 'Blank',
+    component: BlankPage,
     meta: { requiresAuth: true },
   },
   {

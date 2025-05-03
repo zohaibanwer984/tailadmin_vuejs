@@ -7,7 +7,8 @@ import router from './router'
 import { createPinia } from 'pinia'
 import './assets/main.css'
 import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/css/index.css' // Import the library's styles
+import 'vue-loading-overlay/dist/css/index.css'
+import 'jsvectormap/dist/jsvectormap.css'
 
 // Register all valid rules from @vee-validate/rules
 Object.keys(rules).forEach((rule) => {

@@ -10,6 +10,7 @@ import EmailSent from '@/views/auth/EmailSent.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
 import BlankPage from '@/views/pages/BlankPage.vue'
 import UserProfile from '@/views/others/UserProfile.vue'
+import BasicTables from '@/views/tables/BasicTables.vue'
 
 const routes = [
   {
@@ -72,6 +73,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Profile',
+    },
+  },
+  {
+    path: '/basic-tables',
+    name: 'Basic Tables',
+    component: BasicTables,
+    meta: {
+      requiresAuth: true,
+      title: 'Basic Tables',
     },
   },
   {

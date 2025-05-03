@@ -9,6 +9,7 @@ import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 import EmailSent from '@/views/auth/EmailSent.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
 import BlankPage from '@/views/pages/BlankPage.vue'
+import UserProfile from '@/views/others/UserProfile.vue'
 
 const routes = [
   {
@@ -62,6 +63,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Dashboard',
+    },
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: UserProfile,
+    meta: {
+      requiresAuth: true,
+      title: 'Profile',
     },
   },
   {

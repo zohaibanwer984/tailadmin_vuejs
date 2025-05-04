@@ -2,9 +2,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 // Route components
-import Login from '../views/auth/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
-import NotFound from '../views/NotFound.vue'
+import Login from '@/views/auth/Login.vue'
+import Dashboard from '@/views/Dashboard.vue'
+import NotFound from '@/views/NotFound.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 import EmailSent from '@/views/auth/EmailSent.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
@@ -12,6 +12,12 @@ import BlankPage from '@/views/pages/BlankPage.vue'
 import UserProfile from '@/views/others/UserProfile.vue'
 import BasicTables from '@/views/tables/BasicTables.vue'
 import IconsPage from '@/views/IconsPage.vue'
+import Alerts from '@/views/UiElements/Alerts.vue'
+import Avatars from '@/views/UiElements/Avatars.vue'
+import Badges from '@/views/UiElements/Badges.vue'
+import Buttons from '@/views/UiElements/Buttons.vue'
+import Images from '@/views/UiElements/Images.vue'
+import Videos from '@/views/UiElements/Videos.vue'
 
 const routes = [
   {
@@ -101,6 +107,54 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Icons',
+    },
+  },
+  {
+    path: '/alerts',
+    name: 'Alerts',
+    component: Alerts,
+    meta: {
+      title: 'Alerts',
+    },
+  },
+  {
+    path: '/avatars',
+    name: 'Avatars',
+    component: Avatars,
+    meta: {
+      title: 'Avatars',
+    },
+  },
+  {
+    path: '/badge',
+    name: 'Badge',
+    component: Badges,
+    meta: {
+      title: 'Badge',
+    },
+  },
+  {
+    path: '/buttons',
+    name: 'Buttons',
+    component: Buttons,
+    meta: {
+      title: 'Buttons',
+    },
+  },
+  {
+    path: '/images',
+    name: 'Images',
+    component: Images,
+    meta: {
+      title: 'Images',
+    },
+  },
+  {
+    path: '/videos',
+    name: 'Videos',
+    component: Videos,
+    meta: {
+      title: 'Videos',
     },
   },
   {

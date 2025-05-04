@@ -30,7 +30,7 @@ import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 
 // Dynamically import all icons from the `src/icons` directory
 const icons = ref({})
-const modules = import.meta.glob('../icons/*.vue', { eager: true })
+const modules = import.meta.glob('@/icons/*.vue', { eager: true })
 
 for (const path in modules) {
   const name = path.split('/').pop().replace('.vue', '')

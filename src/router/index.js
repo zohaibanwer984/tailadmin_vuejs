@@ -4,14 +4,14 @@ import { useAuthStore } from '../stores/auth'
 // Route components
 import Login from '@/views/auth/Login.vue'
 import Dashboard from '@/views/Dashboard.vue'
-import NotFound from '@/views/NotFound.vue'
+import NotFound from '@/views/pages/NotFound.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 import EmailSent from '@/views/auth/EmailSent.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
 import BlankPage from '@/views/pages/BlankPage.vue'
 import UserProfile from '@/views/others/UserProfile.vue'
 import BasicTables from '@/views/tables/BasicTables.vue'
-import IconsPage from '@/views/IconsPage.vue'
+import Icons from '@/views/UiElements/Icons.vue'
 import Alerts from '@/views/UiElements/Alerts.vue'
 import Avatars from '@/views/UiElements/Avatars.vue'
 import Badges from '@/views/UiElements/Badges.vue'
@@ -102,8 +102,8 @@ const routes = [
   },
   {
     path: '/icons',
-    name: 'IconsPage',
-    component: IconsPage,
+    name: 'Icons',
+    component: Icons,
     meta: {
       requiresAuth: true,
       title: 'Icons',

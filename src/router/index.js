@@ -18,6 +18,7 @@ import Badges from '@/views/UiElements/Badges.vue'
 import Buttons from '@/views/UiElements/Buttons.vue'
 import Images from '@/views/UiElements/Images.vue'
 import Videos from '@/views/UiElements/Videos.vue'
+import Tabs from '@/views/UiElements/Tabs.vue'
 
 const routes = [
   {
@@ -147,6 +148,14 @@ const routes = [
     component: Images,
     meta: {
       title: 'Images',
+    },
+  },
+  {
+    path: '/tabs',
+    name: 'Tabls',
+    component: Tabs,
+    meta: {
+      title: 'Tabs',
     },
   },
   {

@@ -259,6 +259,7 @@ const menuGroups = [
           { name: 'Buttons', path: '/buttons', pro: false },
           { name: 'Icons', path: '/icons', pro: false },
           { name: 'Images', path: '/images', pro: false },
+          { name: 'Tabs', path: '/tabs', pro: false },
           { name: 'Videos', path: '/videos', pro: false },
         ],
       },

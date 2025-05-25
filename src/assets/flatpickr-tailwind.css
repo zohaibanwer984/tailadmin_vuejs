@@ -1,0 +1,33 @@
+.flatpickr-calendar {
+  background-color: var(--color-white) !important;
+}
+.dark .flatpickr-calendar {
+  background-color: var(--color-gray-900);
+}
+.dark .flatpickr-time input,
+.dark .flatpickr-time-separator {
+  background-color: var(--color-gray-900) !important;
+  color: var(--color-white) !important;
+}
+
+.dark .arrowUp:hover,
+.dark .arrowDown:hover {
+  color: var(--color-white) !important;
+  background: color-mix(in oklab, var(--color-white) 5%, transparent) !important;
+}
+.dark .flatpickr-am-pm {
+  color: var(--color-white) !important;
+}
+.dark .flatpickr-am-pm:hover {
+  background: color-mix(in oklab, var(--color-white) 5%, transparent) !important;
+}
+
+.dark .numInputWrapper span{
+  border-color: color-mix(in oklab, currentColor 20%, transparent) !important;
+}
+.dark .numInputWrapper span.arrowUp::after{
+  border-bottom-color: color-mix(in oklab, currentColor 20%, transparent) !important;
+}
+.dark .numInputWrapper span.arrowDown::after{
+ border-top-color: color-mix(in oklab, currentColor 20%, transparent) !important;
+}

@@ -9,6 +9,8 @@ import './assets/main.css'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import 'jsvectormap/dist/jsvectormap.css'
+import 'flatpickr/dist/flatpickr.css'
+import './assets/flatpickr-tailwind.css'
 
 // Register all valid rules from @vee-validate/rules
 Object.keys(rules).forEach((rule) => {

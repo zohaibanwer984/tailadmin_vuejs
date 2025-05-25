@@ -19,6 +19,7 @@ import Buttons from '@/views/UiElements/Buttons.vue'
 import Images from '@/views/UiElements/Images.vue'
 import Videos from '@/views/UiElements/Videos.vue'
 import Tabs from '@/views/UiElements/Tabs.vue'
+import FormElements from '@/views/forms/FormElements.vue'
 
 const routes = [
   {
@@ -100,6 +101,15 @@ const routes = [
       requiresAuth: true,
       title: 'Blank',
     },
+  },
+  {
+    path: '/form-elements',
+    name: 'Form Elements',
+    component: FormElements,
+    meta: {
+      requiresAuth: true,
+      title: 'Form Elements',
+    }
   },
   {
     path: '/icons',

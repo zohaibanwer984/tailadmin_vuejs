@@ -20,6 +20,7 @@ import Images from '@/views/UiElements/Images.vue'
 import Videos from '@/views/UiElements/Videos.vue'
 import Tabs from '@/views/UiElements/Tabs.vue'
 import FormElements from '@/views/forms/FormElements.vue'
+import TimeTablePage from '@/views/tables/TimeTablePage.vue'
 
 const routes = [
   {
@@ -91,6 +92,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Basic Tables',
+    },
+  },
+  {
+    path: '/time-table',
+    name: 'Time Tables',
+    component: TimeTablePage,
+    meta: {
+      requiresAuth: true,
+      title: 'Time Tables',
     },
   },
   {

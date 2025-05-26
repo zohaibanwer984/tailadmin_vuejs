@@ -226,6 +226,7 @@ const menuGroups = [
         icon: TableIcon,
         subItems: [
           { name: 'Basic Tables', path: '/basic-tables', pro: false },
+          { name: 'Time Table', path: '/time-table', pro: false },
         ],
       },
       {

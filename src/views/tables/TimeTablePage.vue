@@ -6,7 +6,7 @@
       <ComponentCard title="Interactive Timetable">
         <div class="flex justify-between items-center mb-4">
           <p class="text-gray-600 dark:text-gray-400">
-            Click cells to assign or remove classes.
+            {{ isEditable ? 'Click cells to assign or remove classes.' : 'Click cells to view assignments.' }}
           </p>
           <Button 
             @click="toggleEditMode"
@@ -28,7 +28,11 @@
         />
 
         <div class="mt-6 flex gap-4">
-          <Button @click="clearAllEntries" variant="danger">
+          <Button 
+            @click="clearAllEntries" 
+            variant="outline"
+            :disabled="!isEditable"
+          >
             Clear All
           </Button>
           <Button @click="showCurrentData" variant="outline">
@@ -110,7 +114,15 @@ const updateTimetable = (newData) => {
 
 const handleCellClick = (cell) => {
   clickedCell.value = cell
-  currentAction.value = cell.isEmpty ? 'add' : 'edit'
+  
+  if (isEditable.value) {
+    // Edit mode: allow add/edit functionality
+    currentAction.value = cell.isEmpty ? 'add' : 'edit'
+  } else {
+    // View mode: only allow viewing, and only if cell has content
+    if (cell.isEmpty) return // Don't open modal for empty cells in view mode
+    currentAction.value = 'view'
+  }
 
   if (cell.isEmpty) {
     currentEntry.value = {
@@ -162,7 +174,9 @@ const toggleEditMode = () => {
 }
 
 const clearAllEntries = () => {
-  timetableRef.value.clearAll()
+  if (isEditable.value) {
+    timetableRef.value.clearAll()
+  }
 }
 
 const showCurrentData = () => {

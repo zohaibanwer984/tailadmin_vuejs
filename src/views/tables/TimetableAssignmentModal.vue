@@ -5,12 +5,56 @@
         {{ modalTitle }}
       </h2>
 
+      <!-- View Mode Display -->
+      <div v-if="modalMode === 'view'" class="border-t border-gray-300 dark:border-gray-700 sm:p-6 p-4 lg:px-11">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-400">
+              Subject
+            </label>
+            <div class="h-11 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90">
+              {{ entry.subject || 'No subject assigned' }}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-400">
+              Teacher
+            </label>
+            <div class="h-11 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90">
+              {{ entry.teacher || 'No teacher assigned' }}
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-400">
+              Color
+            </label>
+            <div class="flex items-center gap-3">
+              <div 
+                class="h-11 w-16 rounded-lg border border-gray-300 dark:border-gray-700"
+                :style="{ backgroundColor: entry.color || '#3B82F6' }"
+              ></div>
+              <div class="h-11 flex items-center px-4 py-2.5 text-sm text-gray-800 dark:text-white/90">
+                {{ entry.color || '#3B82F6' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <Button type="button" variant="outline" @click="handleClose">Close</Button>
+        </div>
+      </div>
+
+      <!-- Edit/Add Form -->
       <Form
+        v-else
         @submit="handleSubmit"
         class="border-t border-gray-300 dark:border-gray-700 sm:p-6 p-4 lg:px-11"
       >
         <!-- Display Form Error -->
-        <div v-if="formError" class="mb-4 p-4 bg-red-50 text-red-600 rounded-lg text-sm">
+        <div v-if="formError" class="mb-4 p-4 bg-red-50 text-red-600 rounded-lg text-sm dark:bg-red-900/20 dark:text-red-400">
           {{ formError }}
         </div>
 
@@ -26,7 +70,7 @@
             placeholder="Enter Subject"
             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
           />
-          <ErrorMessage name="subject" class="text-red-500 text-sm mt-1" />
+          <ErrorMessage name="subject" class="text-red-500 text-sm mt-1 dark:text-red-400" />
         </div>
 
         <div class="mb-4">
@@ -41,7 +85,7 @@
             placeholder="Enter Teacher Name"
             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
           />
-          <ErrorMessage name="teacher" class="text-red-500 text-sm mt-1" />
+          <ErrorMessage name="teacher" class="text-red-500 text-sm mt-1 dark:text-red-400" />
         </div>
 
         <div class="mb-4">
@@ -55,7 +99,7 @@
             rules="required"
             class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:focus:border-brand-800"
           />
-          <ErrorMessage name="color" class="text-red-500 text-sm mt-1" />
+          <ErrorMessage name="color" class="text-red-500 text-sm mt-1 dark:text-red-400" />
         </div>
 
         <div class="flex justify-end gap-3 mt-4">
@@ -92,7 +136,7 @@ const props = defineProps({
   modalMode: {
     type: String,
     required: true,
-    validator: (value) => ['add', 'edit'].includes(value),
+    validator: (value) => ['add', 'edit', 'view'].includes(value),
   },
   entry: {
     type: Object,
@@ -113,9 +157,18 @@ watch(
 )
 
 // Computed properties
-const modalTitle = computed(() =>
-  props.modalMode === 'add' ? 'Assign Class' : 'Edit Assignment',
-)
+const modalTitle = computed(() => {
+  switch (props.modalMode) {
+    case 'add':
+      return 'Assign Class'
+    case 'edit':
+      return 'Edit Assignment'
+    case 'view':
+      return 'View Assignment'
+    default:
+      return 'Assignment'
+  }
+})
 
 const submitButtonText = computed(() => (props.modalMode === 'add' ? 'Assign' : 'Update'))
 

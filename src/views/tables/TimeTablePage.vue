@@ -3,21 +3,21 @@
     <PageBreadcrumb :pageTitle="pageTitle" />
 
     <div class="space-y-6">
-      <ComponentCard title="Interactive Timetable Demo">
+      <ComponentCard title="Interactive Timetable">
         <div class="flex justify-between items-center mb-4">
-          <p class="text-gray-600">
-            Click cells to assign or remove classes. The parent component handles all logic.
+          <p class="text-gray-600 dark:text-gray-400">
+            Click cells to assign or remove classes.
           </p>
-          <button
+          <Button 
             @click="toggleEditMode"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            :variant="isEditable ? 'outline' : 'primary'"
           >
             {{ isEditable ? 'View Mode' : 'Edit Mode' }}
-          </button>
+          </Button>
         </div>
 
         <Timetable
-          ref="timetable"
+          ref="timetableRef"
           :classes="classNames"
           :timetable="timetableData"
           :editable="isEditable"
@@ -28,227 +28,143 @@
         />
 
         <div class="mt-6 flex gap-4">
-          <button
-            @click="addSampleEntry"
-            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-          >
-            Add Sample Entry
-          </button>
-          <button
-            @click="clearAllEntries"
-            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-          >
+          <Button @click="clearAllEntries" variant="danger">
             Clear All
-          </button>
-          <button
-            @click="showCurrentData"
-            class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
-          >
+          </Button>
+          <Button @click="showCurrentData" variant="outline">
             Show Current Data
-          </button>
+          </Button>
         </div>
 
-        <!-- Custom Modal (implemented in parent) -->
-        <div v-if="showCustomModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-            <h3 class="text-lg font-semibold mb-4">
-              {{ currentAction === 'add' ? 'Assign Class' : 'Edit Assignment' }}
-            </h3>
-            
-            <div v-if="currentAction === 'edit'" class="mb-4 p-3 bg-blue-50 rounded">
-              <h4 class="font-medium">Current Assignment:</h4>
-              <p>{{ clickedCell.assignment.subject }} ({{ clickedCell.assignment.teacher }})</p>
-            </div>
-
-            <div class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium mb-1">Subject</label>
-                <input v-model="newEntry.subject" class="w-full p-2 border rounded">
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium mb-1">Teacher</label>
-                <input v-model="newEntry.teacher" class="w-full p-2 border rounded">
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium mb-1">Color</label>
-                <input v-model="newEntry.color" type="color" class="w-full h-10">
-              </div>
-            </div>
-
-            <div class="flex justify-end gap-2 mt-6">
-              <button 
-                @click="showCustomModal = false"
-                class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-              >
-                Cancel
-              </button>
-              <button 
-                v-if="currentAction === 'edit'"
-                @click="removeAssignment"
-                class="px-4 py-2 text-red-600 hover:bg-red-100 rounded"
-              >
-                Remove
-              </button>
-              <button 
-                @click="confirmAssignment"
-                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                {{ currentAction === 'add' ? 'Assign' : 'Update' }}
-              </button>
-            </div>
-          </div>
-        </div>
+        <!-- Timetable Assignment Modal -->
+        <TimetableAssignmentModal
+          :isOpen="showModal"
+          :modalMode="currentAction"
+          :entry="currentEntry"
+          @close="handleModalClose"
+          @success="handleModalSuccess"
+          @remove="handleRemoveAssignment"
+        />
       </ComponentCard>
     </div>
   </AdminLayout>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
 import Timetable from '@/lib/timetable/TimeTable.vue'
+import Button from '@/components/ui/Button.vue'
+import TimetableAssignmentModal from './TimetableAssignmentModal.vue'
 
-const pageTitle = ref('Timetable Showcase')
+// Page configuration
+const pageTitle = ref('Timetable Management')
 const isEditable = ref(true)
-const timetable = ref(null)
+const timetableRef = ref(null)
 
-// Days configuration
+// Timetable configuration
 const days = ref(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'])
-
-// Time slots configuration
 const timeSlots = ref([
   { id: '8-9', label: '8:00-9:00' },
   { id: '9-10', label: '9:00-10:00' },
 ])
 
-// Simplified class names (string array)
-const classNames = ref([
-  'CLASS 1',
-  'CLASS 2',
-  'CLASS 3',
-  'CLASS 4',
-  'CLASS 5'
-])
+const classNames = ref(['CLASS 1', 'CLASS 2', 'CLASS 3', 'CLASS 4', 'CLASS 5'])
 
-// Class details (for modal and assignments)
-const classDetails = ref([
-  { id: 0, name: 'Mathematics', teacher: 'Mr. Smith' },
-  { id: 1, name: 'Science', teacher: 'Ms. Johnson' },
-  { id: 2, name: 'History', teacher: 'Mr. Brown' },
-  { id: 3, name: 'English', teacher: 'Ms. Davis' },
-  { id: 4, name: 'Art', teacher: 'Mr. Wilson' },
-])
-
-// Timetable data (now uses array indices as classId)
+// Sample timetable data
 const timetableData = ref([
-  { 
-    day: 'MON', 
-    timeSlot: '8-9', 
-    classId: 0, // Index of Mathematics
-    subject: 'Mathematics', 
-    teacher: 'Mr. Smith', 
-    color: '#FF5722' 
+  {
+    day: 'MON',
+    timeSlot: '8-9',
+    classId: 0,
+    subject: 'Mathematics',
+    teacher: 'Mr. Smith',
+    color: '#FF5722',
   },
-  { 
-    day: 'WED', 
-    timeSlot: '9-10', 
-    classId: 2, // Index of History
-    subject: 'History', 
-    teacher: 'Mr. Brown', 
-    color: '#3F51B5' 
+  {
+    day: 'WED',
+    timeSlot: '9-10',
+    classId: 2,
+    subject: 'History',
+    teacher: 'Mr. Brown',
+    color: '#3F51B5',
   },
 ])
 
-// Custom modal state
-const showCustomModal = ref(false)
-const currentAction = ref('add') // 'add' or 'edit'
+// Modal state
+const showModal = ref(false)
+const currentAction = ref('add')
 const clickedCell = ref(null)
-const newEntry = ref({
+const currentEntry = ref({
   subject: '',
   teacher: '',
-  color: '#3B82F6'
+  color: '#3B82F6',
 })
 
-// Update timetable data
+// Methods
 const updateTimetable = (newData) => {
   timetableData.value = newData
 }
 
-// Handle cell click - now shows our custom modal
 const handleCellClick = (cell) => {
   clickedCell.value = cell
   currentAction.value = cell.isEmpty ? 'add' : 'edit'
-  
+
   if (cell.isEmpty) {
-    const classDetail = classDetails.value[cell.classId]
-    newEntry.value = {
-      subject: classDetail?.name || classNames.value[cell.classId] || '',
-      teacher: classDetail?.teacher || '',
-      color: '#3B82F6'
+    currentEntry.value = {
+      subject: '',
+      teacher: '',
+      color: '#3B82F6',
     }
   } else {
-    newEntry.value = {
+    currentEntry.value = {
       subject: cell.assignment.subject,
       teacher: cell.assignment.teacher,
-      color: cell.assignment.color || '#3B82F6'
+      color: cell.assignment.color || '#3B82F6',
     }
   }
-  
-  showCustomModal.value = true
+
+  showModal.value = true
 }
 
-// Confirm assignment (add or update)
-const confirmAssignment = () => {
-  const entry = {
+const handleModalClose = () => {
+  showModal.value = false
+  clickedCell.value = null
+}
+
+const handleModalSuccess = ({ action, entry }) => {
+  const timetableEntry = {
     day: clickedCell.value.day,
     timeSlot: clickedCell.value.timeSlot,
     classId: clickedCell.value.classId,
-    subject: newEntry.value.subject,
-    teacher: newEntry.value.teacher,
-    color: newEntry.value.color
+    subject: entry.subject,
+    teacher: entry.teacher,
+    color: entry.color,
   }
-  
-  timetable.value.addEntry(entry)
-  showCustomModal.value = false
+
+  timetableRef.value.addEntry(timetableEntry)
+  showModal.value = false
 }
 
-// Remove assignment
-const removeAssignment = () => {
-  timetable.value.removeEntry(
+const handleRemoveAssignment = () => {
+  timetableRef.value.removeEntry(
     clickedCell.value.day,
     clickedCell.value.timeSlot,
-    clickedCell.value.classId
+    clickedCell.value.classId,
   )
-  showCustomModal.value = false
+  showModal.value = false
 }
 
-// Toggle edit mode
 const toggleEditMode = () => {
   isEditable.value = !isEditable.value
 }
 
-// Add sample entry
-const addSampleEntry = () => {
-  timetable.value.addEntry({
-    day: 'TUE',
-    timeSlot: '9-10',
-    classId: 1, // Index of Science
-    subject: 'Science',
-    teacher: 'Ms. Johnson',
-    color: '#009688'
-  })
-}
-
-// Clear all entries
 const clearAllEntries = () => {
-  timetable.value.clearAll()
+  timetableRef.value.clearAll()
 }
 
-// Show current data in console
 const showCurrentData = () => {
   console.log('Current timetable data:', timetableData.value)
 }
